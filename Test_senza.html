@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulation Télécommande Senza</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; }
+        #screen { width: 300px; height: 300px; background: lightgray; margin: 20px auto; position: relative; cursor: pointer; outline: none; }
+        #cursor { width: 50px; height: 50px; background: red; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        #log { height: 100px; overflow: auto; border: 1px solid black; padding: 10px; margin-top: 20px; }
+    </style>
+</head>
+<body onload="document.getElementById('screen').focus()">
+    <h1>Simulation Télécommande Senza</h1>
+    <div id="screen" tabindex="0" onfocus="this.focus()">
+        <div id="cursor"></div>
+    </div>
+    <div id="log">Logs des actions :</div>
+    
+    <script>
+        let screen = document.getElementById("screen");
+        let cursor = document.getElementById("cursor");
+        let log = document.getElementById("log");
+        let position = { x: 50, y: 50 };
+
+        window.onload = function() {
+            screen.focus();
+        };
+
+        document.addEventListener("keydown", function(event) {
+            switch(event.key) {
+                case "ArrowUp": moveCursor(0, -10); logAction("Flèche Haut"); break;
+                case "ArrowDown": moveCursor(0, 10); logAction("Flèche Bas"); break;
+                case "ArrowLeft": moveCursor(-10, 0); logAction("Flèche Gauche"); break;
+                case "ArrowRight": moveCursor(10, 0); logAction("Flèche Droite"); break;
+                case "Enter": logAction("OK / Sélection"); break;
+                case "Backspace": logAction("Retour"); break;
+                case "Escape": logAction("Menu Ouvert"); break;
+                default:
+                    if (!isNaN(event.key)) logAction("Chiffre Pressé: " + event.key);
+            }
+        });
+
+        function moveCursor(dx, dy) {
+            position.x += dx;
+            position.y += dy;
+            cursor.style.left = position.x + "%";
+            cursor.style.top = position.y + "%";
+        }
+
+        function logAction(action) {
+            let entry = document.createElement("div");
+            entry.textContent = action;
+            log.appendChild(entry);
+            log.scrollTop = log.scrollHeight;
+        }
+    </script>
+</body>
+</html>
